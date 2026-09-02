@@ -47,6 +47,7 @@ let spinButtonClicked = false;
 const getIndex = () => Math.floor(tot - (ang / TAU) * tot) % tot;
 
 // update this to use simply a list of names and automatically alternate colors
+// if number of names is uneven, add a spin again section or a takeout section or something
 function drawSector(sector, i) {
   const ang = arc * i;
   ctx.save();

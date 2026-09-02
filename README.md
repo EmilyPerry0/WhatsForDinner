@@ -14,3 +14,6 @@ Ideas for the project:
 - add test suite
 - add linting and hooks
 - Give a shopping list of what to get (export to phone)
+
+## Original Wheel Spinner Code Credits
+https://github.com/olimorris/spin-the-wheel
