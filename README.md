@@ -13,3 +13,4 @@ Ideas for the project:
 - host on aws
 - add test suite
 - add linting and hooks
+- Give a shopping list of what to get (export to phone)
