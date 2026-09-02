@@ -30,7 +30,7 @@ const events = {
 
 const rand = (m, M) => Math.random() * (M - m) + m;
 const tot = sectors.length;
-const spinEl = document.querySelector("#spin");
+const spinEl = document.querySelector("#spin_button");
 const ctx = document.querySelector("#wheel").getContext("2d");
 const dia = ctx.canvas.width;
 const rad = dia / 2;
@@ -75,8 +75,6 @@ function drawSector(sector, i) {
 function rotate() {
   const sector = sectors[getIndex()];
   ctx.canvas.style.transform = `rotate(${ang - PI / 2}rad)`;
-
-  spinEl.textContent = !angVel ? "SPIN" : sector.label;
   spinEl.style.background = sector.color;
   spinEl.style.color = sector.text;
 }
