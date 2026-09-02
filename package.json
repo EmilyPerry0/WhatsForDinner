@@ -1,0 +1,25 @@
+{
+  "name": "whatsfordinner",
+  "version": "1.0.0",
+  "description": "Personal project to figure out what to eat for dinner.",
+  "homepage": "https://github.com/EmilyPerry0/WhatsForDinner#readme",
+  "bugs": {
+    "url": "https://github.com/EmilyPerry0/WhatsForDinner/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmilyPerry0/WhatsForDinner.git"
+  },
+  "license": "MIT",
+  "author": "emilyperry0",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.9.1",
+    "globals": "^17.12.0"
+  }
+}
