@@ -20,10 +20,19 @@
 
 #spinner_wheel {
     position: relative;
+    width: 80vmin; 
+    height: 80vmin;
+}
+
+#wheel {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .center {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
 }

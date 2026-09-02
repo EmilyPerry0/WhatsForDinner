@@ -31,9 +31,10 @@ const events = {
 const rand = (m, M) => Math.random() * (M - m) + m;
 const tot = sectors.length;
 const spinEl = document.querySelector("#spin_button");
+const canvas = document.querySelector("#wheel");
 const ctx = document.querySelector("#wheel").getContext("2d");
-const dia = ctx.canvas.width;
-const rad = dia / 2;
+let dia = ctx.canvas.width;
+let rad = dia / 2;
 const PI = Math.PI;
 const TAU = 2 * PI;
 const arc = TAU / sectors.length;
@@ -49,7 +50,7 @@ const getIndex = () => Math.floor(tot - (ang / TAU) * tot) % tot;
 // update this to use simply a list of names and automatically alternate colors
 // if number of names is uneven, add a spin again section or a takeout section or something
 function drawSector(sector, i) {
-  const ang = arc * i;
+    const ang = arc * i;
   ctx.save();
 
   // COLOR
@@ -65,11 +66,34 @@ function drawSector(sector, i) {
   ctx.rotate(ang + arc / 2);
   ctx.textAlign = "right";
   ctx.fillStyle = sector.text;
-  ctx.font = "bold 30px 'Lato', sans-serif";
+  const fontSize = Math.max(12, rad * 0.075);
+  ctx.font = `bold ${fontSize}px 'Lato', sans-serif`;
   ctx.fillText(sector.label, rad - 10, 10);
   //
 
   ctx.restore();
+}
+
+function drawWheel() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  sectors.forEach(drawSector);
+}
+
+function resizeCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+
+  ctx.setTransform(1, 0, 0, 1, 0, 0); // reset scaling before reapplying
+  ctx.scale(dpr, dpr);
+
+  // Recalculate dia/rad based on CSS size, not the scaled buffer size
+  dia = rect.width;
+  rad = dia / 2;
+
+  drawWheel();
 }
 
 function rotate() {
@@ -101,7 +125,8 @@ function engine() {
 }
 
 function init() {
-  sectors.forEach(drawSector);
+  resizeCanvas(); // set initial size + draw
+  window.addEventListener("resize", resizeCanvas);
   engine(); // Start engine
   spinEl.addEventListener("click", () => {
     if (!angVel) angVel = rand(0.25, 0.45);
