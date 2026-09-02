@@ -1,5 +1,5 @@
 # WhatsForDinner
-Personal project to figure out what to eat for dinner. 
+Personal project to figure out what to eat for dinner.
 
 Ideas for the project:
 - Have a spinner wheel that can randomly choose one meal in the database.
@@ -17,3 +17,11 @@ Ideas for the project:
 
 ## Original Wheel Spinner Code Credits
 https://github.com/olimorris/spin-the-wheel
+
+## Configure linting and pre commit hooks
+
+```
+pipx install pre-commit
+pre-commit install
+pre-commit run --all-files
+```

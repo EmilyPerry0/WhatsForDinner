@@ -1,6 +1,6 @@
-const textColor = "#FFFFFF"
-const wheelBackgroundColor_1 = "#4203ff"
-const wheelBackgroundColor_2 = "#ff10ab"
+const textColor = "#FFFFFF";
+const wheelBackgroundColor_1 = "#4203ff";
+const wheelBackgroundColor_2 = "#ff10ab";
 
 const sectors = [
   { color: wheelBackgroundColor_1, text: textColor, label: "Tofu Tacos" },
@@ -9,24 +9,9 @@ const sectors = [
   { color: wheelBackgroundColor_2, text: textColor, label: "Wraps" },
   { color: wheelBackgroundColor_1, text: textColor, label: "Takeout" },
   { color: wheelBackgroundColor_2, text: textColor, label: "Pasta" },
-  { color: wheelBackgroundColor_1, text: textColor, label: "Smash \"Burgers\"" },
+  { color: wheelBackgroundColor_1, text: textColor, label: 'Smash "Burgers"' },
   { color: wheelBackgroundColor_2, text: textColor, label: "Dal" },
 ];
-
-const events = {
-  listeners: {},
-  addListener: function (eventName, fn) {
-    this.listeners[eventName] = this.listeners[eventName] || [];
-    this.listeners[eventName].push(fn);
-  },
-  fire: function (eventName, ...args) {
-    if (this.listeners[eventName]) {
-      for (let fn of this.listeners[eventName]) {
-        fn(...args);
-      }
-    }
-  },
-};
 
 const rand = (m, M) => Math.random() * (M - m) + m;
 const tot = sectors.length;
@@ -50,7 +35,7 @@ const getIndex = () => Math.floor(tot - (ang / TAU) * tot) % tot;
 // update this to use simply a list of names and automatically alternate colors
 // if number of names is uneven, add a spin again section or a takeout section or something
 function drawSector(sector, i) {
-    const ang = arc * i;
+  const ang = arc * i;
   ctx.save();
 
   // COLOR
@@ -106,9 +91,9 @@ function rotate() {
 function frame() {
   if (!angVel && spinButtonClicked) {
     spinButtonClicked = false;
-    const sector = sectors[getIndex()]; // maybe use this to figure out which page to go to.
-    setTimeout(function() {
-    window.location.href = "orange_tofu_recipe.html";
+    // const sector = sectors[getIndex()]; // maybe use this to figure out which page to go to.
+    setTimeout(function () {
+      window.location.href = "orange_tofu_recipe.html";
     }, 1000);
   }
 

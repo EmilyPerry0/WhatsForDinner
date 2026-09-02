@@ -11,15 +11,15 @@ repos:
       - id: check-case-conflict
       - id: check-illegal-windows-names
       - id: check-yaml
-  
+
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: "v9.39.1"
     hooks:
       - id: eslint
         name: eslint (frontend)
-        files: ^frontend/.*\.js$
+        files: ^src/.*\.js$
         types: [file]
-        args: [--fix, --config, eslint.config.js]
+        args: [--fix, --config, eslint.config.mjs]
         additional_dependencies:
           - eslint@9.39.1
           - eslint-config-prettier@10.1.8
@@ -31,5 +31,5 @@ repos:
         name: prettier (frontend)
         entry: npx prettier --write
         language: unsupported
-        files: ^*.(js|css|scss|html|json)$
+        files: ^(index\.html|src/.*)$
         types_or: [javascript, css, scss, html, json]

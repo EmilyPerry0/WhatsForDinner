@@ -1,6 +1,6 @@
 .button {
-  background-color: #04AA6D;
-  border: 2px solid #FFFFFF;
+  background-color: #04aa6d;
+  border: 2px solid #ffffff;
   color: white;
   padding: 20px;
   text-align: center;
@@ -11,36 +11,36 @@
 }
 
 .spin_button_wrapper {
-    display: inline-block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .spin_button {
-    position: relative;
-    border-radius: 50%;
-    z-index: 2;
+  position: relative;
+  border-radius: 50%;
+  z-index: 2;
 }
 
 .spin_arrow {
-    width: 0;
-	height: 0;
-	border-left: 10px solid transparent;
-	border-right: 10px solid transparent;
-	border-bottom: 40px solid #FFFFFF;
-    position: absolute;
-    transform: translateX(-50%);
-    z-index: 1;
-    top: -20px;
-    left: 50%;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 40px solid #ffffff;
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 1;
+  top: -20px;
+  left: 50%;
 }
 
 #spinner_wheel {
-    position: relative;
-    width: 80vmin; 
-    height: 80vmin;
+  position: relative;
+  width: 80vmin;
+  height: 80vmin;
 }
 
 #wheel {
