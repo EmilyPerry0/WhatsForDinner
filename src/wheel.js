@@ -1,6 +1,6 @@
-const textColor = "#FFFFFF";
-const wheelBackgroundColor_1 = "#4203ff";
-const wheelBackgroundColor_2 = "#ff10ab";
+const textColor = "#3D3750";
+const wheelBackgroundColor_1 = "#5DC0EC";
+const wheelBackgroundColor_2 = "#F57AC5";
 
 const sectors = [
   { color: wheelBackgroundColor_1, text: textColor, label: "Tofu Tacos" },
