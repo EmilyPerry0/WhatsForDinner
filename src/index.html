@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <title>WhatsForDinnerC+E</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="{{ '/styles.css' | url }}" />
+  </head>
+
+  <body>
+    <div class="center">
+      <div id="spinner_wheel">
+        <canvas id="wheel"></canvas>
+        <div class="spin_button_wrapper">
+          <div class="spin_arrow"></div>
+          <button id="spin_button" class="button spin_button">SPIN</button>
+        </div>
+      </div>
+    </div>
+    <script defer src="{{ '/wheel.js' | url }}"></script>
+  </body>
+</html>

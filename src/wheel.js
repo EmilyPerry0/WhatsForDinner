@@ -30,6 +30,19 @@ let ang = 0; // Angle in radians
 
 let spinButtonClicked = false;
 
+// Built at deploy time from src/recipes/*.md (see recipe-index.json.njk).
+// A sector only links to a recipe page once a matching wheelLabel exists,
+// so new recipes show up automatically — nothing here needs to change.
+let recipeIndex = [];
+fetch("recipe-index.json")
+  .then((res) => (res.ok ? res.json() : []))
+  .then((data) => {
+    recipeIndex = data;
+  })
+  .catch(() => {
+    recipeIndex = [];
+  });
+
 const getIndex = () => Math.floor(tot - (ang / TAU) * tot) % tot;
 
 // update this to use simply a list of names and automatically alternate colors
@@ -91,10 +104,13 @@ function rotate() {
 function frame() {
   if (!angVel && spinButtonClicked) {
     spinButtonClicked = false;
-    // const sector = sectors[getIndex()]; // maybe use this to figure out which page to go to.
-    setTimeout(function () {
-      window.location.href = "orange_tofu_recipe.html";
-    }, 1000);
+    const sector = sectors[getIndex()];
+    const recipe = recipeIndex.find((r) => r.wheelLabel === sector.label);
+    if (recipe) {
+      setTimeout(function () {
+        window.location.href = `recipes/${recipe.slug}/`;
+      }, 1000);
+    }
   }
 
   angVel *= friction; // Decrement velocity by friction

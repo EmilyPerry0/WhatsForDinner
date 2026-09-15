@@ -1,0 +1,10 @@
+---
+permalink: recipe-index.json
+eleventyExcludeFromCollections: true
+---
+[
+{%- for recipe in collections.recipes %}
+  {%- if not loop.first %},{% endif %}
+  { "slug": {{ recipe.fileSlug | dump | safe }}, "title": {{ recipe.data.title | dump | safe }}, "wheelLabel": {{ recipe.data.wheelLabel | dump | safe }} }
+{%- endfor %}
+]

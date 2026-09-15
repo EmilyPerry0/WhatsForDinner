@@ -31,5 +31,5 @@ repos:
         name: prettier (frontend)
         entry: npx prettier --write
         language: unsupported
-        files: ^(index\.html|src/.*)$
+        files: ^src/.*$
         types_or: [javascript, css, scss, html, json]

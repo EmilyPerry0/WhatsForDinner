@@ -55,3 +55,24 @@
   align-items: center;
   height: 100vh;
 }
+
+.recipe {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  color: #3d3750;
+  font-family: sans-serif;
+}
+
+.recipe h1 {
+  color: #000000;
+}
+
+.back_link {
+  color: #5dc0ec;
+  text-decoration: none;
+}
+
+.back_link:hover {
+  text-decoration: underline;
+}
