@@ -5,6 +5,6 @@ eleventyExcludeFromCollections: true
 [
 {%- for recipe in collections.recipes %}
   {%- if not loop.first %},{% endif %}
-  { "slug": {{ recipe.fileSlug | dump | safe }}, "title": {{ recipe.data.title | dump | safe }}, "wheelLabel": {{ recipe.data.wheelLabel | dump | safe }} }
+  { "slug": {{ recipe.fileSlug | dump | safe }}, "label": {{ (recipe.data.wheelLabel or recipe.data.title) | dump | safe }} }
 {%- endfor %}
 ]

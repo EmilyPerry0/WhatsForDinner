@@ -1,6 +1,5 @@
 ---
 title: Curry
-wheelLabel: Curry
 layout: recipe-layout.njk
 ---
 

@@ -1,6 +1,5 @@
 ---
 title: Dal
-wheelLabel: Dal
 layout: recipe-layout.njk
 ---
 

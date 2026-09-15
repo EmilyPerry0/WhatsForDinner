@@ -1,5 +1,5 @@
 ---
-title: Tofu Tacos
+title: Smash "Burgers"
 layout: recipe-layout.njk
 ---
 
@@ -7,8 +7,8 @@ _Placeholder recipe — replace this with the real thing!_
 
 ## Ingredients
 
-- Tofu Tacos
+- "Burgers"
 
 ## Steps
 
-1. Make it.
+1. Smash them.

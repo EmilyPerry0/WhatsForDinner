@@ -1,6 +1,5 @@
 ---
 title: Orange Tofu
-wheelLabel: Orange Tofu
 layout: recipe-layout.njk
 ---
 

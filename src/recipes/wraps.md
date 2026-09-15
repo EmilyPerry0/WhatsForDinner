@@ -1,6 +1,5 @@
 ---
 title: Wraps
-wheelLabel: Wraps
 layout: recipe-layout.njk
 ---
 

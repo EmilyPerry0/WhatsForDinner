@@ -31,7 +31,6 @@ Add a file to `src/recipes/`, e.g. `src/recipes/tofu-tacos.md`:
 ```md
 ---
 title: Tofu Tacos
-wheelLabel: Tofu Tacos
 layout: recipe-layout.njk
 ---
 
@@ -44,11 +43,18 @@ layout: recipe-layout.njk
 1. ...
 ```
 
-That's it — Eleventy builds it into its own page at `/recipes/tofu-tacos/`
-using the same shared layout ([src/_includes/recipe-layout.njk](src/_includes/recipe-layout.njk))
-as every other recipe, and the wheel ([src/wheel.js](src/wheel.js)) automatically
-links the matching sector to it once `wheelLabel` matches that sector's label
-in the `sectors` list — no other code needs to change.
+That's it — Eleventy builds it into its own page at `/recipes/tofu-tacos/` using
+the same shared layout ([src/_includes/recipe-layout.njk](src/_includes/recipe-layout.njk))
+as every other recipe, **and it gets its own sector on the wheel**. The recipes
+folder is the single source of truth: the build writes a `recipe-index.json`
+listing every recipe, and the wheel ([src/wheel.js](src/wheel.js)) generates its
+sectors from that — assigning the two wheel colors in alternation, and padding
+with a "Spin Again" sector when there's an odd number of recipes. No other code
+needs to change.
+
+Sectors are ordered alphabetically by `title`. If a title is too long to read on
+a wheel sector, add an optional `wheelLabel:` to the frontmatter and the wheel
+will use that instead.
 
 If you deploy this under a subpath (e.g. a GitHub Pages project site at
 `username.github.io/WhatsForDinner/`), build with

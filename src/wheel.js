@@ -2,19 +2,26 @@ const textColor = "#3D3750";
 const wheelBackgroundColor_1 = "#5DC0EC";
 const wheelBackgroundColor_2 = "#F57AC5";
 
-const sectors = [
-  { color: wheelBackgroundColor_1, text: textColor, label: "Tofu Tacos" },
-  { color: wheelBackgroundColor_2, text: textColor, label: "Orange Tofu" },
-  { color: wheelBackgroundColor_1, text: textColor, label: "Curry" },
-  { color: wheelBackgroundColor_2, text: textColor, label: "Wraps" },
-  { color: wheelBackgroundColor_1, text: textColor, label: "Takeout" },
-  { color: wheelBackgroundColor_2, text: textColor, label: "Pasta" },
-  { color: wheelBackgroundColor_1, text: textColor, label: 'Smash "Burgers"' },
-  { color: wheelBackgroundColor_2, text: textColor, label: "Dal" },
-];
+const SPIN_AGAIN_LABEL = "Spin Again!";
+
+// Built from recipe-index.json once it loads (see init).
+let sectors = [];
+
+// Turn the recipe list into drawable sectors: alternate the two wheel colors, and
+// pad with a "Spin Again" sector when the count is odd.
+function buildSectors(recipes) {
+  const entries = recipes.map((r) => ({ label: r.label, slug: r.slug }));
+  if (entries.length % 2 !== 0) {
+    entries.push({ label: SPIN_AGAIN_LABEL });
+  }
+  return entries.map((entry, i) => ({
+    ...entry,
+    color: i % 2 === 0 ? wheelBackgroundColor_1 : wheelBackgroundColor_2,
+    text: textColor,
+  }));
+}
 
 const rand = (m, M) => Math.random() * (M - m) + m;
-const tot = sectors.length;
 const spinEl = document.querySelector("#spin_button");
 const canvas = document.querySelector("#wheel");
 const ctx = document.querySelector("#wheel").getContext("2d");
@@ -22,7 +29,7 @@ let dia = ctx.canvas.width;
 let rad = dia / 2;
 const PI = Math.PI;
 const TAU = 2 * PI;
-const arc = TAU / sectors.length;
+let arc = 0;
 
 const friction = 0.991; // 0.995=soft, 0.99=mid, 0.98=hard
 let angVel = 0; // Angular velocity
@@ -30,23 +37,9 @@ let ang = 0; // Angle in radians
 
 let spinButtonClicked = false;
 
-// Built at deploy time from src/recipes/*.md (see recipe-index.json.njk).
-// A sector only links to a recipe page once a matching wheelLabel exists,
-// so new recipes show up automatically — nothing here needs to change.
-let recipeIndex = [];
-fetch("recipe-index.json")
-  .then((res) => (res.ok ? res.json() : []))
-  .then((data) => {
-    recipeIndex = data;
-  })
-  .catch(() => {
-    recipeIndex = [];
-  });
+const getIndex = () =>
+  Math.floor(sectors.length - (ang / TAU) * sectors.length) % sectors.length;
 
-const getIndex = () => Math.floor(tot - (ang / TAU) * tot) % tot;
-
-// update this to use simply a list of names and automatically alternate colors
-// if number of names is uneven, add a spin again section or a takeout section or something
 function drawSector(sector, i) {
   const ang = arc * i;
   ctx.save();
@@ -105,10 +98,10 @@ function frame() {
   if (!angVel && spinButtonClicked) {
     spinButtonClicked = false;
     const sector = sectors[getIndex()];
-    const recipe = recipeIndex.find((r) => r.wheelLabel === sector.label);
-    if (recipe) {
+    // The "Spin Again" sector has no slug, so landing on it goes nowhere.
+    if (sector.slug) {
       setTimeout(function () {
-        window.location.href = `recipes/${recipe.slug}/`;
+        window.location.href = `recipes/${sector.slug}/`;
       }, 1000);
     }
   }
@@ -126,13 +119,25 @@ function engine() {
 }
 
 function init() {
-  resizeCanvas(); // set initial size + draw
   window.addEventListener("resize", resizeCanvas);
-  engine(); // Start engine
-  spinEl.addEventListener("click", () => {
-    if (!angVel) angVel = rand(0.25, 0.45);
-    spinButtonClicked = true;
-  });
+
+  // recipe-index.json is generated at build time from src/recipes/*.md, so
+  // adding a recipe file adds its sector to the wheel automatically.
+  fetch("recipe-index.json")
+    .then((res) => (res.ok ? res.json() : []))
+    .then((recipes) => {
+      sectors = buildSectors(recipes);
+      if (!sectors.length) return;
+
+      arc = TAU / sectors.length;
+      resizeCanvas(); // set initial size + draw
+      engine(); // Start engine
+      spinEl.addEventListener("click", () => {
+        if (!angVel) angVel = rand(0.25, 0.45);
+        spinButtonClicked = true;
+      });
+    })
+    .catch(() => {});
 }
 
 init();
