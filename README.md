@@ -12,6 +12,8 @@ Ideas for the project:
 - host on aws
 - add test suite
 - Give a shopping list of what to get (export to phone)
+- Be able to mark what ingredients are in the house and have that propogate on the website so one person thats home can mark the things we have and the person in the store can cross things off as they shop
+    - Do this locally first, maybe with cookies
 
 ## Building the site
 
