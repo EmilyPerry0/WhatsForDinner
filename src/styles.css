@@ -47,6 +47,11 @@
   width: 100%;
   height: 100%;
   display: block;
+  /* The canvas is square but the wheel is the circle inside it. Clipping keeps
+     the empty corners out of hit-testing as well as painting, so the pointer
+     cursor only shows over sectors that actually do something. */
+  clip-path: circle(50%);
+  cursor: pointer;
 }
 
 .center {

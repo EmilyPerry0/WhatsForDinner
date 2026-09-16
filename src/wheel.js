@@ -42,8 +42,40 @@ let ang = 0; // Angle in radians
 
 let spinButtonClicked = false;
 
-const getIndex = () =>
-  Math.floor(sectors.length - (ang / TAU) * sectors.length) % sectors.length;
+// Which sector sits at a given screen angle. The spin applies a CSS rotation to
+// the canvas, so screen angles and wheel angles differ by exactly that rotation.
+// Scaling to sector units before flooring, rather than normalising the angle
+// first, is what keeps this exact for an angle landing on a sector border.
+function sectorIndexAtAngle(screenAngle) {
+  const wheelAngle = screenAngle - (ang - PI / 2);
+  const index = Math.floor((wheelAngle / TAU) * sectors.length);
+  return ((index % sectors.length) + sectors.length) % sectors.length;
+}
+
+// The arrow sits at the top of the wheel.
+const getIndex = () => sectorIndexAtAngle(-PI / 2);
+
+function openRecipe(sector) {
+  // The "Spin Again" sector has no slug, so it goes nowhere.
+  if (sector && sector.slug) {
+    window.location.href = `recipes/${sector.slug}/`;
+  }
+}
+
+function handleWheelClick(event) {
+  if (angVel) return; // don't act on a moving target
+
+  // The rotation inflates the element's bounding rect but keeps its centre put,
+  // so the centre is safe to take from the rect even mid-spin.
+  const rect = canvas.getBoundingClientRect();
+  const dx = event.clientX - (rect.left + rect.width / 2);
+  const dy = event.clientY - (rect.top + rect.height / 2);
+
+  // offsetWidth, not the rect's width: layout width ignores the rotation.
+  if (Math.hypot(dx, dy) > canvas.offsetWidth / 2) return;
+
+  openRecipe(sectors[sectorIndexAtAngle(Math.atan2(dy, dx))]);
+}
 
 const labelFont = (size) => `bold ${size}px 'Lato', sans-serif`;
 
@@ -104,16 +136,19 @@ function drawWheel() {
 
 function resizeCanvas() {
   const dpr = window.devicePixelRatio || 1;
-  const rect = canvas.getBoundingClientRect();
+  // offsetWidth/Height rather than the bounding rect: once a spin has rotated
+  // the canvas, the rect is the inflated box around the rotated square, so a
+  // resize after a spin would size the wheel from the wrong number.
+  const size = canvas.offsetWidth;
 
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
+  canvas.width = size * dpr;
+  canvas.height = canvas.offsetHeight * dpr;
 
   ctx.setTransform(1, 0, 0, 1, 0, 0); // reset scaling before reapplying
   ctx.scale(dpr, dpr);
 
   // Recalculate dia/rad based on CSS size, not the scaled buffer size
-  dia = rect.width;
+  dia = size;
   rad = dia / 2;
   hubRad = spinEl.getBoundingClientRect().width / 2;
 
@@ -131,12 +166,7 @@ function frame() {
   if (!angVel && spinButtonClicked) {
     spinButtonClicked = false;
     const sector = sectors[getIndex()];
-    // The "Spin Again" sector has no slug, so landing on it goes nowhere.
-    if (sector.slug) {
-      setTimeout(function () {
-        window.location.href = `recipes/${sector.slug}/`;
-      }, 1000);
-    }
+    setTimeout(() => openRecipe(sector), 1000);
   }
 
   angVel *= friction; // Decrement velocity by friction
@@ -169,6 +199,7 @@ function init() {
         if (!angVel) angVel = rand(0.25, 0.45);
         spinButtonClicked = true;
       });
+      canvas.addEventListener("click", handleWheelClick);
     })
     .catch(() => {});
 }
