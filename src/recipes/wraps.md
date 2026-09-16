@@ -3,12 +3,10 @@ title: Wraps
 layout: recipe-layout.njk
 ---
 
-_Placeholder recipe — replace this with the real thing!_
-
 ## Ingredients
 
 - Wraps
 
 ## Steps
 
-1. Make it.
+1. Make it how you like it. usually with fries, lettuce, tomato, tofu, and various sauces on a tortilla.
