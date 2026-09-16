@@ -37,6 +37,7 @@ module.exports = function (eleventyConfig) {
   // Static assets used by every page — copied through untouched.
   eleventyConfig.addPassthroughCopy("src/styles.css");
   eleventyConfig.addPassthroughCopy("src/wheel.js");
+  eleventyConfig.addPassthroughCopy("src/images");
 
   // Render "1/2" as ½ and "1 1/2" as 1½. Overriding the text rule means code spans
   // and HTML attributes are left alone.

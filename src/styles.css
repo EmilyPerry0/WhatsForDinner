@@ -76,3 +76,44 @@
 .back_link:hover {
   text-decoration: underline;
 }
+
+/* Decorations in the top corners of the wheel page. The two are sized
+   differently on purpose: the heart is portrait and the banner landscape, so
+   matching their widths would leave the heart towering over the banner. */
+.corner {
+  position: fixed;
+  pointer-events: none; /* never swallow a click meant for the wheel */
+}
+
+/* Each gets its own top offset rather than a shared one: rotating about the
+   centre makes an image's rendered box taller than the image itself, and the
+   wide banner overhangs its own top edge by about twice as much as the heart,
+   so equal offsets would sit them at visibly different heights. */
+.corner_left {
+  top: 1.5rem;
+  left: 2rem;
+  width: 7rem;
+  transform: rotate(-30deg);
+}
+
+.corner_right {
+  top: 3rem;
+  right: 1.5rem;
+  width: 12rem;
+  transform: rotate(30deg);
+}
+
+/* The wheel is 80vmin, so there's little corner room left on a phone. */
+@media (max-width: 600px) {
+  .corner_left {
+    top: 1rem;
+    left: 1.25rem;
+    width: 4rem;
+  }
+
+  .corner_right {
+    top: 1.75rem;
+    right: 0.75rem;
+    width: 6.5rem;
+  }
+}
