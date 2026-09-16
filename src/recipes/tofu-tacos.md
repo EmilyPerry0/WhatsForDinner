@@ -3,8 +3,6 @@ title: Shredded Tofu Tacos
 layout: recipe-layout.njk
 ---
 
-_Placeholder recipe — replace this with the real thing!_
-
 ## Ingredients (Tofu)
 
 - 400g firm tofu
