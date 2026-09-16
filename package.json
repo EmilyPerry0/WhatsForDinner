@@ -15,8 +15,9 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "build": "eleventy",
-    "serve": "eleventy --serve",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && eleventy",
+    "serve": "npm run clean && eleventy --serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
