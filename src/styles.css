@@ -73,6 +73,12 @@
   color: #000000;
 }
 
+/* Links in recipe text keep their underline, unlike .back_link — in a body of
+   text the underline is what marks a link as one. */
+.recipe a {
+  color: #5dc0ec;
+}
+
 .back_link {
   color: #5dc0ec;
   text-decoration: none;
