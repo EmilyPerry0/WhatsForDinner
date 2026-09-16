@@ -32,6 +32,8 @@ const ctx = document.querySelector("#wheel").getContext("2d");
 let dia = ctx.canvas.width;
 let rad = dia / 2;
 let hubRad = 0; // radius of the SPIN button at the centre, measured on resize
+let lastSize = 0; // last size/dpr the canvas was built at, so a resize event
+let lastDpr = 0; // that changes neither can skip the work
 const PI = Math.PI;
 const TAU = 2 * PI;
 let arc = 0;
@@ -140,6 +142,13 @@ function resizeCanvas() {
   // the canvas, the rect is the inflated box around the rotated square, so a
   // resize after a spin would size the wheel from the wrong number.
   const size = canvas.offsetWidth;
+
+  // A resize event doesn't mean the wheel changed size. Reassigning canvas.width
+  // below clears and re-rasterises it, so reacting to every event makes the wheel
+  // visibly rescale while a phone fires resizes mid-spin.
+  if (size === lastSize && dpr === lastDpr) return;
+  lastSize = size;
+  lastDpr = dpr;
 
   canvas.width = size * dpr;
   canvas.height = canvas.offsetHeight * dpr;
