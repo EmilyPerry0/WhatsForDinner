@@ -90,35 +90,22 @@
   pointer-events: none; /* never swallow a click meant for the wheel */
 }
 
-/* Each gets its own top offset rather than a shared one: rotating about the
-   centre makes an image's rendered box taller than the image itself, and the
-   wide banner overhangs its own top edge by about twice as much as the heart,
-   so equal offsets would sit them at visibly different heights. */
+/* Sized in vmin so they scale with the viewport exactly as the 80vmin wheel
+   does. The offsets are in vmin too, not rem: rotating about the centre makes
+   an image's rendered box bigger than the image, by an amount proportional to
+   its size, so an offset that clears that overhang at one viewport size has to
+   grow with the image to keep clearing it at another. The banner overhangs its
+   own top edge by about twice as much as the heart, hence the different tops. */
 .corner_left {
-  top: 1.5rem;
-  left: 2rem;
-  width: 7rem;
+  top: 3.5vmin;
+  left: 4vmin;
+  width: 14vmin;
   transform: rotate(-30deg);
 }
 
 .corner_right {
-  top: 3rem;
-  right: 1.5rem;
-  width: 12rem;
+  top: 6.5vmin;
+  right: 2vmin;
+  width: 24vmin;
   transform: rotate(30deg);
-}
-
-/* The wheel is 80vmin, so there's little corner room left on a phone. */
-@media (max-width: 600px) {
-  .corner_left {
-    top: 1rem;
-    left: 1.25rem;
-    width: 4rem;
-  }
-
-  .corner_right {
-    top: 1.75rem;
-    right: 0.75rem;
-    width: 6.5rem;
-  }
 }
