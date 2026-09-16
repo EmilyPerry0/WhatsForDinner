@@ -4,6 +4,10 @@ const wheelBackgroundColor_2 = "#F57AC5";
 
 const SPIN_AGAIN_LABEL = "Spin Again!";
 
+const LABEL_EDGE_PADDING = 10; // gap between a label and the wheel's rim
+const LABEL_HUB_GAP = 8; // gap between a label and the SPIN button
+const MIN_LABEL_SIZE = 8; // don't shrink a long label past legibility
+
 // Built from recipe-index.json once it loads (see init).
 let sectors = [];
 
@@ -27,6 +31,7 @@ const canvas = document.querySelector("#wheel");
 const ctx = document.querySelector("#wheel").getContext("2d");
 let dia = ctx.canvas.width;
 let rad = dia / 2;
+let hubRad = 0; // radius of the SPIN button at the centre, measured on resize
 const PI = Math.PI;
 const TAU = 2 * PI;
 let arc = 0;
@@ -39,6 +44,24 @@ let spinButtonClicked = false;
 
 const getIndex = () =>
   Math.floor(sectors.length - (ang / TAU) * sectors.length) % sectors.length;
+
+const labelFont = (size) => `bold ${size}px 'Lato', sans-serif`;
+
+// Labels are drawn inward from the rim, so a long one runs under the SPIN button
+// at the hub. Shrink it just enough to fit the space between rim and button.
+// Sets ctx.font as a side effect of measuring, so callers get the right font.
+function fitLabel(label) {
+  const available = rad - LABEL_EDGE_PADDING - hubRad - LABEL_HUB_GAP;
+
+  // Step down a point at a time rather than scaling by a ratio: font metrics
+  // aren't perfectly linear in the size, so measuring is what actually fits.
+  let size = Math.max(12, rad * 0.075);
+  ctx.font = labelFont(size);
+  while (ctx.measureText(label).width > available && size > MIN_LABEL_SIZE) {
+    size -= 1;
+    ctx.font = labelFont(size);
+  }
+}
 
 function drawSector(sector, i) {
   const ang = arc * i;
@@ -56,11 +79,20 @@ function drawSector(sector, i) {
   ctx.translate(rad, rad);
   ctx.rotate(ang + arc / 2);
   ctx.textAlign = "right";
+  ctx.textBaseline = "middle";
   ctx.fillStyle = sector.text;
-  const fontSize = Math.max(12, rad * 0.075);
-  ctx.font = `bold ${fontSize}px 'Lato', sans-serif`;
-  ctx.fillText(sector.label, rad - 10, 10);
-  //
+  fitLabel(sector.label);
+
+  // Centre the label's ink on the sector's bisector, which the rotate above put
+  // at y=0. Two things to get right: drawing at any other y sits on a line
+  // parallel to the bisector rather than along it, which skews the label towards
+  // one border near the hub; and "middle" centres the em box, which is a couple
+  // of pixels off the ink for a label with no descender — enough to show as a
+  // few degrees once the label reaches in towards the centre.
+  const metrics = ctx.measureText(sector.label);
+  const inkOffset =
+    (metrics.actualBoundingBoxAscent - metrics.actualBoundingBoxDescent) / 2;
+  ctx.fillText(sector.label, rad - LABEL_EDGE_PADDING, inkOffset);
 
   ctx.restore();
 }
@@ -83,6 +115,7 @@ function resizeCanvas() {
   // Recalculate dia/rad based on CSS size, not the scaled buffer size
   dia = rect.width;
   rad = dia / 2;
+  hubRad = spinEl.getBoundingClientRect().width / 2;
 
   drawWheel();
 }
