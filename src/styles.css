@@ -197,9 +197,9 @@ body {
 }
 
 .corner_right {
-  top: 6.5vmin;
-  right: 2vmin;
-  width: 24vmin;
+  top: 7.5vmin;
+  right: 2.3vmin;
+  width: 28vmin;
   transform: rotate(30deg);
 }
 
