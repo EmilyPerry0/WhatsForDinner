@@ -17,6 +17,30 @@ Ideas for the project:
 The site is built with [Eleventy](https://www.11ty.dev/): everything in `src/`
 gets built into static HTML in `dist/`.
 
+### Layout
+
+`src/` root holds exactly the things that get a URL. Everything else lives in a
+named folder.
+
+```
+.eleventy.js          build wiring
+config/markdown.js    fractions, auto-linking, external links
+src/
+  index.html          the wheel          -> /
+  easter-egg.njk                         -> /easter-egg/
+  recipe-index.json.njk                  -> /recipe-index.json
+  _data/              global data (eggImages)
+  _includes/          layouts
+  assets/             copied through verbatim by one passthrough rule
+    css/  js/  images/{ui,easter-egg}/
+  recipes/            one .md per recipe
+recipes-archive/      retired recipes, outside src/ so they cannot publish
+test/
+```
+
+Anything added under `src/assets/` is served automatically — there is no per-file
+config to remember.
+
 ```
 npm install
 npm run serve   # local dev server with live reload, http://localhost:8080
@@ -46,7 +70,8 @@ That's it — Eleventy builds it into its own page at `/recipes/tofu-tacos/` usi
 the same shared layout ([src/_includes/recipe-layout.njk](src/_includes/recipe-layout.njk))
 as every other recipe, **and it gets its own sector on the wheel**. The recipes
 folder is the single source of truth: the build writes a `recipe-index.json`
-listing every recipe, and the wheel ([src/wheel.js](src/wheel.js)) generates its
+listing every recipe, and the wheel
+([src/assets/js/wheel.mjs](src/assets/js/wheel.mjs)) generates its
 sectors from that — assigning the two wheel colors in alternation, and padding
 with a "Spin Again" sector when there's an odd number of recipes. No other code
 needs to change.

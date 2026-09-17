@@ -17,7 +17,7 @@ repos:
     hooks:
       - id: eslint
         name: eslint (frontend)
-        files: ^(src/.*|test/.*|\.eleventy)\.(js|mjs|cjs)$
+        files: ^(src/.*|test/.*|config/.*|\.eleventy)\.(js|mjs|cjs)$
         types: [file]
         args: [--fix, --config, eslint.config.mjs]
         additional_dependencies:
@@ -31,7 +31,7 @@ repos:
         name: prettier (frontend)
         entry: npx prettier --write
         language: unsupported
-        files: ^(src/.*|test/.*|\.eleventy\.js)$
+        files: ^(src/.*|test/.*|config/.*|\.eleventy\.js)$
         types_or: [javascript, css, scss, html, json]
 
       - id: unit-tests
