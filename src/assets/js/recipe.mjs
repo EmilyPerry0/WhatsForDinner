@@ -1,4 +1,5 @@
 import { ingredientKey } from "./ingredient-key.mjs";
+import { keepAwake } from "./keep-awake.mjs";
 
 // Checked ingredients are stored per recipe, keyed by the page's own path, and
 // held as ingredient *names* rather than positions — that's what makes the same
@@ -108,4 +109,7 @@ function init() {
   render();
 }
 
+// Outside init(), which bails early on a recipe with no ingredients list. The
+// screen should stay on for every recipe, ingredients or not.
+keepAwake();
 init();
