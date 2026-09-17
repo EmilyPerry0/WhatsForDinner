@@ -13,7 +13,9 @@
   </head>
 
   <body>
-    <a href="{{ '/' | url }}" class="back_link easter_egg_back">&larr; Back to the wheel</a>
+    <a href="{{ '/' | url }}" class="back_wheel easter_egg_back" title="Back to the wheel">
+      <img src="{{ '/images/wheel.png' | url }}" alt="Back to the wheel" />
+    </a>
 
     {#
       The photo list is rendered in rather than fetched: it is known at build

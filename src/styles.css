@@ -90,8 +90,8 @@ body {
   color: #000000;
 }
 
-/* Links in recipe text keep their underline, unlike .back_link — in a body of
-   text the underline is what marks a link as one. */
+/* Links in recipe text keep their underline — in a body of text the underline is
+   what marks a link as one. */
 .recipe a {
   color: #5dc0ec;
 }
@@ -146,13 +146,33 @@ body {
   text-decoration: line-through;
 }
 
-.back_link {
-  color: #5dc0ec;
-  text-decoration: none;
+/* The wheel itself is the way back to it. */
+.back_wheel {
+  display: block;
+  width: 3rem;
+  text-decoration: none; /* the default underline draws across the image */
+  flex: none; /* don't let the flex row squash it */
+  line-height: 0; /* kill the descender gap under the image */
+  transition: transform 0.2s ease;
 }
 
-.back_link:hover {
-  text-decoration: underline;
+.back_wheel img {
+  width: 100%;
+  display: block;
+}
+
+.back_wheel:hover {
+  transform: rotate(-30deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .back_wheel {
+    transition: none;
+  }
+
+  .back_wheel:hover {
+    transform: none;
+  }
 }
 
 /* Decorations in the top corners of the wheel page. The two are sized
@@ -208,8 +228,8 @@ body {
   min-height: 100vh;
   min-height: 100svh;
   /* The white border the photo sits inside. Deeper at the top so a tall photo
-     never runs under the back link. */
-  padding: 4rem 2rem 2rem;
+     never runs under the back link, which is fixed 1.5rem down and 3rem tall. */
+  padding: 5.5rem 2rem 2rem;
 }
 
 .easter_egg_photo {
@@ -218,7 +238,7 @@ body {
      the width would let a tall one run off the bottom of the screen. The
      subtraction leaves room for the padding, the gap and the heart. */
   max-width: 100%;
-  max-height: max(8rem, calc(100svh - 14rem));
+  max-height: max(8rem, calc(100svh - 15rem));
   object-fit: contain;
 }
 
@@ -226,8 +246,6 @@ body {
   position: fixed;
   top: 1.5rem;
   left: 1.5rem;
-  /* This page has no .recipe wrapper to inherit a font from. */
-  font-family: sans-serif;
 }
 
 /* Same heart as the wheel page's corner, but upright and centred under the

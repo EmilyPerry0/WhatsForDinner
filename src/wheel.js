@@ -205,7 +205,7 @@ function init() {
       resizeCanvas(); // set initial size + draw
       engine(); // Start engine
       spinEl.addEventListener("click", () => {
-        if (!angVel) angVel = rand(0.25, 0.45);
+        if (!angVel) angVel = rand(0.25, 0.478263); // 4.000 turns of span instead of 3.505
         spinButtonClicked = true;
       });
       canvas.addEventListener("click", handleWheelClick);

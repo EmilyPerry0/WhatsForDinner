@@ -10,7 +10,9 @@
   <body>
     <main class="recipe">
       <p class="recipe_top">
-        <a href="{{ '/' | url }}" class="back_link">&larr; Back to the wheel</a>
+        <a href="{{ '/' | url }}" class="back_wheel" title="Back to the wheel">
+          <img src="{{ '/images/wheel.png' | url }}" alt="Back to the wheel" />
+        </a>
         <!-- Unhidden by recipe.mjs, so it never shows as a dead control on a
              page with no ingredients or when scripts don't run. -->
         <button type="button" id="reset_ingredients" class="reset_button" hidden>
