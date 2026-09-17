@@ -103,20 +103,23 @@ body {
   gap: 1rem;
 }
 
+/* The image carries the word "reset", so the button needs no chrome of its own.
+   Deliberately no `display` here: the button ships with the hidden attribute
+   until recipe.mjs unhides it, and any author display declaration would beat the
+   browser's own [hidden] { display: none } and show it too early. */
 .reset_button {
+  width: 4.5rem;
+  flex: none; /* don't let the flex row squash it */
+  line-height: 0; /* kill the descender gap under the image */
   background: none;
-  border: 1px solid #5dc0ec;
-  border-radius: 999px;
-  color: #5dc0ec;
-  padding: 0.3rem 0.8rem;
-  font: inherit;
-  font-size: 0.85rem;
+  border: 0;
+  padding: 0;
   cursor: pointer;
 }
 
-.reset_button:hover {
-  background: #5dc0ec;
-  color: #ffffff;
+.reset_button img {
+  width: 100%;
+  display: block;
 }
 
 /* The checkbox stands in for the bullet. */
@@ -153,26 +156,11 @@ body {
   text-decoration: none; /* the default underline draws across the image */
   flex: none; /* don't let the flex row squash it */
   line-height: 0; /* kill the descender gap under the image */
-  transition: transform 0.2s ease;
 }
 
 .back_wheel img {
   width: 100%;
   display: block;
-}
-
-.back_wheel:hover {
-  transform: rotate(-30deg);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .back_wheel {
-    transition: none;
-  }
-
-  .back_wheel:hover {
-    transform: none;
-  }
 }
 
 /* Decorations in the top corners of the wheel page. The two are sized
