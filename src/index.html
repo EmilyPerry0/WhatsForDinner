@@ -8,11 +8,14 @@
   </head>
 
   <body>
-    <img
-      class="corner corner_left"
-      src="{{ '/images/heart-c-plus-e.png' | url }}"
-      alt="C plus E inside a heart"
-    />
+    <!-- The heart is the way into the easter egg. Nothing else links there. -->
+    <a
+      class="corner corner_left corner_link"
+      href="{{ '/easter-egg/' | url }}"
+      aria-label="C plus E inside a heart"
+    >
+      <img src="{{ '/images/heart-c-plus-e.png' | url }}" alt="" />
+    </a>
     <img
       class="corner corner_right"
       src="{{ '/images/no-decisions-required.png' | url }}"

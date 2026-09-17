@@ -1,3 +1,7 @@
+const fs = require("node:fs");
+
+const EGG_IMAGE_DIR = "src/images/easter_egg";
+
 // Fractions that have a single Unicode character. Anything not in here (3/16,
 // or a ratio like 30/40) is left exactly as written.
 const VULGAR_FRACTIONS = {
@@ -50,6 +54,17 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/images");
   eleventyConfig.addPassthroughCopy("src/recipe.mjs");
   eleventyConfig.addPassthroughCopy("src/ingredient-key.mjs");
+  eleventyConfig.addPassthroughCopy("src/easter-egg.mjs");
+  eleventyConfig.addPassthroughCopy("src/pick-photo.mjs");
+
+  // The easter egg page picks from whatever photos are sitting in the folder, so
+  // dropping a new one in is all it takes — no list to keep in step by hand.
+  eleventyConfig.addGlobalData("eggImages", () =>
+    fs
+      .readdirSync(EGG_IMAGE_DIR)
+      .filter((name) => /\.(jpe?g|png|webp)$/i.test(name))
+      .sort(),
+  );
 
   eleventyConfig.amendLibrary("md", (md) => {
     // Turn a bare URL in a recipe into a link. Markdown only auto-links the

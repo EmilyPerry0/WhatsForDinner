@@ -1,0 +1,37 @@
+{#
+  A .njk page rather than .html: Eleventy renders plain .html through Liquid,
+  which has no loop.first or dump. recipe-index.json.njk builds its list the
+  same way for the same reason.
+#}
+<!doctype html>
+<html>
+  <head>
+    <title>C+E — WhatsForDinnerC+E</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{ '/styles.css' | url }}" />
+  </head>
+
+  <body>
+    <a href="{{ '/' | url }}" class="back_link easter_egg_back">&larr; Back to the wheel</a>
+
+    {#
+      The photo list is rendered in rather than fetched: it is known at build
+      time, and a fetch would only add a round trip and a way to fail. No
+      "| safe" here on purpose — Nunjucks escapes the quotes so the JSON
+      survives as an attribute value.
+    #}
+    <main class="easter_egg" data-photos="[{% for name in eggImages %}{% if not loop.first %},{% endif %}{{ ('/images/easter_egg/' + name) | url | dump }}{% endfor %}]">
+      <!-- No src: the photo is chosen in the browser, so baking one in would
+           download a file that is about to be replaced. Hidden until then. -->
+      <img class="easter_egg_photo" id="egg_photo" alt="A photo of the two of us" hidden />
+
+      <!-- A button, not a link: it deals a new photo rather than going anywhere. -->
+      <button type="button" class="egg_heart" id="egg_heart" aria-label="Show another photo">
+        <img src="{{ '/images/heart-c-plus-e.png' | url }}" alt="" />
+      </button>
+    </main>
+
+    <script type="module" src="{{ '/easter-egg.mjs' | url }}"></script>
+  </body>
+</html>
