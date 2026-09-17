@@ -18,7 +18,7 @@
     "clean": "rm -rf dist",
     "build": "npm run clean && eleventy",
     "serve": "npm run clean && eleventy --serve",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test test/"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",

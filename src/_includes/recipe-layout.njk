@@ -9,9 +9,17 @@
 
   <body>
     <main class="recipe">
-      <p><a href="{{ '/' | url }}" class="back_link">&larr; Back to the wheel</a></p>
+      <p class="recipe_top">
+        <a href="{{ '/' | url }}" class="back_link">&larr; Back to the wheel</a>
+        <!-- Unhidden by recipe.mjs, so it never shows as a dead control on a
+             page with no ingredients or when scripts don't run. -->
+        <button type="button" id="reset_ingredients" class="reset_button" hidden>
+          Reset checklist
+        </button>
+      </p>
       <h1>{{ title }}</h1>
       {{ content | safe }}
     </main>
+    <script type="module" src="{{ '/recipe.mjs' | url }}"></script>
   </body>
 </html>

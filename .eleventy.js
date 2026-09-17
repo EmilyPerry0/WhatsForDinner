@@ -48,6 +48,8 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/styles.css");
   eleventyConfig.addPassthroughCopy("src/wheel.js");
   eleventyConfig.addPassthroughCopy("src/images");
+  eleventyConfig.addPassthroughCopy("src/recipe.mjs");
+  eleventyConfig.addPassthroughCopy("src/ingredient-key.mjs");
 
   eleventyConfig.amendLibrary("md", (md) => {
     // Turn a bare URL in a recipe into a link. Markdown only auto-links the
