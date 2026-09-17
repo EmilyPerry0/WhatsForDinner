@@ -1,0 +1,115 @@
+/* The spinner wheel home page. */
+
+.button {
+  background-color: #04aa6d;
+  border: 2px solid #ffffff;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+}
+
+.spin_button_wrapper {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spin_button {
+  position: relative;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.spin_arrow {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 40px solid #ffffff;
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 1;
+  top: -20px;
+  left: 50%;
+}
+
+#spinner_wheel {
+  position: relative;
+  width: 80vmin;
+  height: 80vmin;
+  /* A rotated square's bounding box is bigger than the square, and it grows and
+     shrinks as the wheel turns. Left uncontained it changes the page's scroll
+     height every frame, which jitters the scrollbar and resizes the wheel.
+     Clipping loses nothing: the wheel is a circle inscribed in this square, so
+     only the empty corners are cut. */
+  overflow: hidden;
+}
+
+#wheel {
+  width: 100%;
+  height: 100%;
+  display: block;
+  /* The canvas is square but the wheel is the circle inside it. Clipping keeps
+     the empty corners out of hit-testing as well as painting, so the pointer
+     cursor only shows over sectors that actually do something. */
+  clip-path: circle(50%);
+  cursor: pointer;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* svh is the viewport with the mobile browser's chrome showing, so it doesn't
+     change as that chrome hides and reappears. vh resolves to the taller
+     chrome-hidden viewport, which leaves the page scrollable on a phone and
+     resizes the wheel every time the URL bar moves. */
+  height: 100vh;
+  height: 100svh;
+}
+
+/* Decorations in the top corners of the wheel page. The two are sized
+   differently on purpose: the heart is portrait and the banner landscape, so
+   matching their widths would leave the heart towering over the banner. */
+.corner {
+  position: fixed;
+  pointer-events: none; /* never swallow a click meant for the wheel */
+}
+
+/* The heart is a link, so it needs its clicks back. The banner on the right
+   stays inert. */
+.corner_link {
+  pointer-events: auto;
+  display: block;
+}
+
+.corner img {
+  width: 100%;
+  display: block;
+}
+
+/* Sized in vmin so they scale with the viewport exactly as the 80vmin wheel
+   does. The offsets are in vmin too, not rem: rotating about the centre makes
+   an image's rendered box bigger than the image, by an amount proportional to
+   its size, so an offset that clears that overhang at one viewport size has to
+   grow with the image to keep clearing it at another. The banner overhangs its
+   own top edge by about twice as much as the heart, hence the different tops. */
+.corner_left {
+  top: 3.5vmin;
+  left: 4vmin;
+  width: 14vmin;
+  transform: rotate(-30deg);
+}
+
+.corner_right {
+  top: 7.5vmin;
+  right: 2.3vmin;
+  width: 28vmin;
+  transform: rotate(30deg);
+}

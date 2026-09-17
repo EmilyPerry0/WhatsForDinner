@@ -1,0 +1,23 @@
+/* Loaded by every page, ahead of that page's own stylesheet. Only things genuinely
+   shared belong here. */
+
+/* Without this the default 8px margin makes every page 16px taller than the
+   viewport, which leaves the wheel page permanently scrollable. */
+body {
+  margin: 0;
+}
+
+/* The wheel itself is the way back to it. Shared by the recipe pages and the
+   easter egg page, which is why it sits here rather than in either of them. */
+.back_wheel {
+  display: block;
+  width: 3rem;
+  text-decoration: none; /* the default underline draws across the image */
+  flex: none; /* don't let the flex row squash it */
+  line-height: 0; /* kill the descender gap under the image */
+}
+
+.back_wheel img {
+  width: 100%;
+  display: block;
+}

@@ -1,0 +1,51 @@
+/* The easter egg page: one photo, centred, with the heart under it. */
+
+.easter_egg {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  /* svh rather than vh for the same reason as .center on the wheel page — vh is
+     the taller chrome-hidden viewport, which would leave the page scrollable on
+     a phone. */
+  min-height: 100vh;
+  min-height: 100svh;
+  /* The white border the photo sits inside. Deeper at the top so a tall photo
+     never runs under the back link, which is fixed 1.5rem down and 3rem tall. */
+  padding: 5.5rem 2rem 2rem;
+}
+
+.easter_egg_photo {
+  display: block;
+  /* The photos are mostly 4:3 landscape but one is portrait, so bounding only
+     the width would let a tall one run off the bottom of the screen. The
+     subtraction leaves room for the padding, the gap and the heart. */
+  max-width: 100%;
+  max-height: max(8rem, calc(100svh - 15rem));
+  object-fit: contain;
+}
+
+.easter_egg_back {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+}
+
+/* Same heart as the wheel page's corner, but upright and centred under the
+   photo rather than tilted into a corner. */
+.egg_heart {
+  display: block;
+  width: 12vmin;
+  min-width: 56px;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.egg_heart img {
+  width: 100%;
+  display: block;
+}

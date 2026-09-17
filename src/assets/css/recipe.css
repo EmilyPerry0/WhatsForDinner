@@ -1,0 +1,72 @@
+/* The recipe pages, built from src/recipes/*.md through recipe-layout.njk. */
+
+.recipe {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  color: #3d3750;
+  font-family: sans-serif;
+}
+
+.recipe h1 {
+  color: #000000;
+}
+
+/* Links in recipe text keep their underline — in a body of text the underline is
+   what marks a link as one. */
+.recipe a {
+  color: #5dc0ec;
+}
+
+.recipe_top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* The image carries the word "reset", so the button needs no chrome of its own.
+   Deliberately no `display` here: the button ships with the hidden attribute
+   until recipe.mjs unhides it, and any author display declaration would beat the
+   browser's own [hidden] { display: none } and show it too early. */
+.reset_button {
+  width: 4.5rem;
+  flex: none; /* don't let the flex row squash it */
+  line-height: 0; /* kill the descender gap under the image */
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.reset_button img {
+  width: 100%;
+  display: block;
+}
+
+/* The checkbox stands in for the bullet. */
+.ingredient_list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.ingredient_list label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.15rem 0;
+}
+
+.ingredient_list input {
+  accent-color: #f57ac5;
+  /* Keep the box on the first line of a long, wrapping ingredient. */
+  flex: none;
+  align-self: center;
+}
+
+.ingredient_list .is_checked,
+.ingredient_list li.is_checked {
+  color: #9a94ad;
+  text-decoration: line-through;
+}
