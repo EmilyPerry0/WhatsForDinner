@@ -1,6 +1,6 @@
 const fs = require("node:fs");
 
-const EGG_IMAGE_DIR = "src/images/easter_egg";
+const EGG_IMAGE_DIR = "src/assets/images/easter-egg";
 
 // Fractions that have a single Unicode character. Anything not in here (3/16,
 // or a ratio like 30/40) is left exactly as written.
@@ -48,14 +48,10 @@ function formatFractions(text) {
 }
 
 module.exports = function (eleventyConfig) {
-  // Static assets used by every page — copied through untouched.
-  eleventyConfig.addPassthroughCopy("src/styles.css");
-  eleventyConfig.addPassthroughCopy("src/wheel.js");
-  eleventyConfig.addPassthroughCopy("src/images");
-  eleventyConfig.addPassthroughCopy("src/recipe.mjs");
-  eleventyConfig.addPassthroughCopy("src/ingredient-key.mjs");
-  eleventyConfig.addPassthroughCopy("src/easter-egg.mjs");
-  eleventyConfig.addPassthroughCopy("src/pick-photo.mjs");
+  // Everything under src/assets is copied through untouched. One rule rather than
+  // one per file: a script that is never passed through 404s at runtime with no
+  // build error, so a new stylesheet or module should need no config at all.
+  eleventyConfig.addPassthroughCopy("src/assets");
 
   // The easter egg page picks from whatever photos are sitting in the folder, so
   // dropping a new one in is all it takes — no list to keep in step by hand.

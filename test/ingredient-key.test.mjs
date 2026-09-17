@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { ingredientKey } from "../src/ingredient-key.mjs";
+import { ingredientKey } from "../src/assets/js/ingredient-key.mjs";
 
 // The groupings below are taken from the real recipe files. Fractions appear as
 // the rendered characters (½, ⅓) because the build converts them before any of

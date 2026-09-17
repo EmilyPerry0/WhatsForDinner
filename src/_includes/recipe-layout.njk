@@ -4,14 +4,14 @@
     <title>{{ title }} — WhatsForDinnerC+E</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="{{ '/styles.css' | url }}" />
+    <link rel="stylesheet" href="{{ '/assets/css/styles.css' | url }}" />
   </head>
 
   <body>
     <main class="recipe">
       <p class="recipe_top">
         <a href="{{ '/' | url }}" class="back_wheel" title="Back to the wheel">
-          <img src="{{ '/images/wheel.png' | url }}" alt="Back to the wheel" />
+          <img src="{{ '/assets/images/ui/wheel.png' | url }}" alt="Back to the wheel" />
         </a>
         <!-- Unhidden by recipe.mjs, so it never shows as a dead control on a
              page with no ingredients or when scripts don't run. -->
@@ -22,12 +22,12 @@
           title="Reset checklist"
           hidden
         >
-          <img src="{{ '/images/reset_button.png' | url }}" alt="Reset checklist" />
+          <img src="{{ '/assets/images/ui/reset-button.png' | url }}" alt="Reset checklist" />
         </button>
       </p>
       <h1>{{ title }}</h1>
       {{ content | safe }}
     </main>
-    <script type="module" src="{{ '/recipe.mjs' | url }}"></script>
+    <script type="module" src="{{ '/assets/js/recipe.mjs' | url }}"></script>
   </body>
 </html>

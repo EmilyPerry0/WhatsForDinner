@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { pickDifferent } from "../src/pick-photo.mjs";
+import { pickDifferent } from "../src/assets/js/pick-photo.mjs";
 
 const PHOTOS = ["a.jpg", "b.jpg", "c.jpg", "d.jpg"];
 
