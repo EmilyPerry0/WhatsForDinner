@@ -19,3 +19,21 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+--------------------------------------------------------------------------------
+THIRD-PARTY CONTENT — NOT COVERED BY THE MIT LICENSE ABOVE
+--------------------------------------------------------------------------------
+
+The font files in src/assets/fonts/ are not part of "the Software" above and are
+not licensed under the MIT License.
+
+    Comic Neue (comic-neue-400.woff2, comic-neue-700.woff2)
+    Copyright 2014 The Comic Neue Project Authors
+    https://github.com/crozynski/comicneue
+    Licensed under the SIL Open Font License, Version 1.1.
+    Full license text: src/assets/fonts/OFL.txt
+
+The SIL Open Font License requires that the font software be distributed
+entirely under that license and not under any other, so the MIT grant above
+must not be read as extending to those files.

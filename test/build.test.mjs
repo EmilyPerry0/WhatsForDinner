@@ -405,6 +405,38 @@ test("the font is shipped with the site, not borrowed from the visitor", () => {
   assert.match(read("assets/fonts/OFL.txt"), /SIL Open Font License/);
 });
 
+test("the bundled font stays under its own licence", () => {
+  // The OFL lets the font be bundled with anything, but clause 5 requires the
+  // font software itself stay under the OFL and not be redistributed under
+  // another licence. This repo is MIT, so without an explicit carve-out the
+  // top-level LICENSE reads as covering the .woff2 files too.
+  const repoLicence = fs.readFileSync("LICENSE", "utf8");
+  assert.match(repoLicence, /MIT License/);
+  assert.match(
+    repoLicence,
+    /src\/assets\/fonts\/[\s\S]*not licensed under the MIT License/,
+    "LICENSE must carve the fonts out of the MIT grant",
+  );
+  assert.match(repoLicence, /SIL Open Font License/);
+  assert.match(
+    repoLicence,
+    /Copyright 2014 The Comic Neue Project Authors/,
+    "the font's copyright notice must be reproduced",
+  );
+
+  // Clause 2: the notice and licence travel with every copy, including the
+  // deployed one.
+  const ofl = read("assets/fonts/OFL.txt");
+  assert.match(ofl, /Copyright 2014 The Comic Neue Project Authors/);
+  assert.match(ofl, /SIL OPEN FONT LICENSE Version 1\.1/);
+  assert.match(ofl, /PERMISSION & CONDITIONS/);
+
+  // And verbatim: the whitespace hooks are configured to skip this folder, since
+  // tidying someone else's licence text is still editing it.
+  const hooks = fs.readFileSync(".pre-commit-config.yaml", "utf8");
+  assert.match(hooks, /exclude:\s*\^src\/assets\/fonts\//);
+});
+
 test("the wheel redraws once the webfont has loaded", () => {
   // A canvas paints in whatever font is loaded when it draws and never looks
   // again. With a webfont the first draw can land in the fallback, leaving the

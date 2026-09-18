@@ -84,6 +84,18 @@ If you deploy this under a subpath (e.g. a GitHub Pages project site at
 `username.github.io/WhatsForDinner/`), build with
 `npx eleventy --pathprefix=WhatsForDinner` so the generated links account for it.
 
+## Licensing
+
+The project is MIT licensed, **except the bundled fonts**. The site ships
+[Comic Neue](https://github.com/crozynski/comicneue) in `src/assets/fonts/`, which
+is under the SIL Open Font License 1.1 and stays under it — the OFL does not allow
+font software to be redistributed under a different licence. Its full text sits
+beside the fonts in `src/assets/fonts/OFL.txt` and is deployed with the site.
+
+Keep `OFL.txt` next to the fonts if you ever move them, and leave it byte for byte
+as published; the pre-commit whitespace hooks already skip that folder for exactly
+that reason.
+
 ## Original Wheel Spinner Code Credits
 https://github.com/olimorris/spin-the-wheel
 
