@@ -1,22 +1,51 @@
 /* Loaded by every page, ahead of that page's own stylesheet. Only things genuinely
    shared belong here. */
 
+/* Comic Neue, a free Comic Sans lookalike under the SIL Open Font Licence, served
+   from our own assets. Comic Sans itself ships with Windows and macOS but with
+   neither iOS nor Android, so relying on the visitor to own it can only ever mean
+   phones get something else -- which is how the live site once ended up in
+   calligraphy. Shipping the font is the only way every device renders the same.
+
+   The licence travels with it in fonts/OFL.txt.
+
+   Only the two weights the site uses: 400 for text, 700 for headings and the
+   wheel's sector labels. No recipe uses italic, so none is shipped; a browser
+   will slant the regular if one ever appears.
+
+   `swap` so text paints straight away in a fallback and changes over when the
+   font lands, rather than sitting invisible while it downloads. */
+@font-face {
+  font-family: "Comic Neue";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/comic-neue-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Comic Neue";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/comic-neue-700.woff2") format("woff2");
+}
+
 /* The one place the site's typeface is decided. Everything else inherits it or
    says `font-family: inherit`, so there is no second copy to fall out of step.
 
-   Comic Sans ships with Windows and macOS but not with iOS, Android or Linux, so
-   the rest of the chain matters. Chalkboard SE is Apple's casual handwriting face
-   and is on both iOS and macOS; Comic Neue is the free Comic Sans lookalike, for
-   anyone who happens to have it.
+   Comic Neue comes first deliberately, ahead of a locally installed Comic Sans:
+   the point is that every device shows the same letterforms, and letting Windows
+   and macOS substitute the real thing would defeat that.
 
-   It ends in `sans-serif`, NOT `cursive`. The CSS generic `cursive` means formal
-   joined script, not casual lettering: on Apple platforms it resolves to Apple
-   Chancery or Snell Roundhand, which is calligraphy and looks nothing like Comic
-   Sans. That was live on the site once. A plain sans is a far better wrong
+   The rest only matters if the download fails. It ends in `sans-serif`, NOT
+   `cursive`: the CSS generic `cursive` means formal joined script, not casual
+   lettering, and on Apple platforms resolves to Apple Chancery or Snell
+   Roundhand. That was live on the site once. A plain sans is a far better wrong
    answer than a wedding invitation. */
 :root {
   --font:
-    "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Comic Neue", sans-serif;
+    "Comic Neue", "Comic Sans MS", "Comic Sans", "Chalkboard SE", sans-serif;
 }
 
 /* Without this the default 8px margin makes every page 16px taller than the

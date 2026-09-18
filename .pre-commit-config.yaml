@@ -2,8 +2,13 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: "v6.0.0"
     hooks:
+      # The bundled font licence is a verbatim third-party document and should
+      # stay byte for byte as published -- tidying its whitespace would be
+      # editing someone else's licence text.
       - id: trailing-whitespace
+        exclude: ^src/assets/fonts/
       - id: end-of-file-fixer
+        exclude: ^src/assets/fonts/
       - id: check-added-large-files
         args: ["--maxkb=5000"]
       - id: check-merge-conflict

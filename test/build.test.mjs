@@ -290,10 +290,13 @@ test("the whole site is set in one font, declared once", () => {
     .replace(/\s+/g, " ")
     .trim();
 
+  // Comic Neue is shipped with the site, so it leads: the whole point is that a
+  // Mac and a phone render identically, which a locally installed Comic Sans
+  // would undo.
   assert.match(
     stack,
-    /^"Comic Sans MS"/,
-    "Comic Sans should be asked for first",
+    /^"Comic Neue"/,
+    `the self-hosted font should be asked for first: ${stack}`,
   );
 
   // The bug that reached the live site: the chain ended in the generic `cursive`,
@@ -313,9 +316,12 @@ test("the whole site is set in one font, declared once", () => {
   // Inputs and buttons get browser fonts unless told otherwise.
   assert.match(base, /input[\s\S]{0,40}button\s*\{[^}]*font-family:\s*inherit/);
 
-  // No stylesheet may name a typeface of its own.
+  // No stylesheet may name a typeface of its own. @font-face blocks are exempt:
+  // naming the family is what they are for.
   for (const file of fs.readdirSync(path.join(out, "assets/css"))) {
-    const css = read(`assets/css/${file}`).replace(/\/\*[\s\S]*?\*\//g, "");
+    const css = read(`assets/css/${file}`)
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/@font-face\s*\{[^}]*\}/g, "");
     for (const [, declared] of css.matchAll(/font-family:\s*([^;}]+)/g)) {
       assert.match(
         declared.trim(),
@@ -332,6 +338,57 @@ test("the whole site is set in one font, declared once", () => {
       );
     }
   }
+});
+
+test("the font is shipped with the site, not borrowed from the visitor", () => {
+  // Relying on the visitor owning Comic Sans is what put calligraphy on every
+  // phone. Serving the font is the only way every device renders the same.
+  const base = read("assets/css/base.css");
+  const faces = [...base.matchAll(/@font-face\s*\{([^}]*)\}/g)].map(
+    (m) => m[1],
+  );
+  assert.ok(faces.length >= 2, "expected a face for regular and for bold");
+
+  const weights = faces.map((face) => face.match(/font-weight:\s*(\d+)/)?.[1]);
+  assert.deepEqual(
+    weights.sort(),
+    ["400", "700"],
+    "the site uses 400 for text and 700 for headings and wheel labels",
+  );
+
+  for (const face of faces) {
+    assert.match(face, /font-family:\s*"Comic Neue"/);
+    // Without swap, text is invisible while the font downloads.
+    assert.match(face, /font-display:\s*swap/, "every face should swap");
+
+    const [, ref] = face.match(/url\("([^"]+)"\)/);
+    const file = path.resolve(path.join(out, "assets/css"), ref);
+    assert.ok(fs.existsSync(file), `@font-face points at missing ${ref}`);
+    // A 404 page saved as .woff2 would be silently ignored by the browser and
+    // look exactly like the bug this replaces.
+    assert.equal(
+      fs.readFileSync(file).subarray(0, 4).toString(),
+      "wOF2",
+      `${ref} is not a woff2 file`,
+    );
+  }
+
+  // The licence has to travel with the font.
+  assert.ok(exists("assets/fonts/OFL.txt"), "the OFL licence must ship");
+  assert.match(read("assets/fonts/OFL.txt"), /SIL Open Font License/);
+});
+
+test("the wheel redraws once the webfont has loaded", () => {
+  // A canvas paints in whatever font is loaded when it draws and never looks
+  // again. With a webfont the first draw can land in the fallback, leaving the
+  // page in Comic Neue and the wheel in something else. Nothing but this check
+  // would notice: it depends on the cache, so it usually looks fine locally.
+  const wheel = fs.readFileSync(path.join(out, "assets/js/wheel.mjs"), "utf8");
+  assert.match(
+    wheel,
+    /document\.fonts\??\.ready\s*\.?\s*\.then\(\s*drawWheel\s*\)/,
+    "wheel.mjs should redraw on document.fonts.ready",
+  );
 });
 
 test("the wheel's sector labels use the page font", () => {

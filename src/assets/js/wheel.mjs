@@ -192,6 +192,15 @@ function init() {
 
       arc = TAU / sectors.length;
       resizeCanvas(); // set initial size + draw
+
+      // A canvas paints with whatever font is loaded at the moment it draws, and
+      // never revisits it. The site's typeface is a webfont, so the first draw
+      // can land in the fallback -- leaving the page in Comic Neue and the wheel,
+      // the largest text on it, in something else, depending on the cache. Draw
+      // again once the font is in. This re-runs fitLabel too, which matters: the
+      // shrink-to-fit sizing has to be measured against the real face.
+      document.fonts?.ready.then(drawWheel);
+
       engine(); // Start engine
       spinEl.addEventListener("click", () => {
         if (!angVel) angVel = rand(SPIN_MIN_VELOCITY, SPIN_MAX_VELOCITY);
