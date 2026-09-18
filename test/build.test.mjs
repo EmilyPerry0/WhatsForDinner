@@ -280,6 +280,56 @@ test("both search box images ship and both states are styled", () => {
   assert.ok(exists("assets/images/ui/search_no_words.png"));
 });
 
+test("the whole site is set in one font, declared once", () => {
+  // "Everywhere" is the kind of thing that quietly becomes "almost everywhere"
+  // when someone adds a component with its own font-family.
+  const base = read("assets/css/base.css");
+  assert.match(
+    base,
+    /--font:\s*"Comic Sans MS"/,
+    "base.css should define the typeface",
+  );
+  assert.match(base, /body\s*\{[^}]*font-family:\s*var\(--font\)/);
+  // Inputs and buttons get browser fonts unless told otherwise.
+  assert.match(base, /input[\s\S]{0,40}button\s*\{[^}]*font-family:\s*inherit/);
+
+  // No stylesheet may name a typeface of its own.
+  for (const file of fs.readdirSync(path.join(out, "assets/css"))) {
+    const css = read(`assets/css/${file}`).replace(/\/\*[\s\S]*?\*\//g, "");
+    for (const [, declared] of css.matchAll(/font-family:\s*([^;}]+)/g)) {
+      assert.match(
+        declared.trim(),
+        /^(var\(--font\)|inherit)$/,
+        `${file} sets its own font-family: ${declared.trim()}`,
+      );
+    }
+    // The `font:` shorthand would smuggle one in too.
+    for (const [, shorthand] of css.matchAll(/[^-]font:\s*([^;}]+)/g)) {
+      assert.equal(
+        shorthand.trim(),
+        "inherit",
+        `${file} sets a font shorthand: ${shorthand.trim()}`,
+      );
+    }
+  }
+});
+
+test("the wheel's sector labels use the page font", () => {
+  // The canvas does not inherit CSS, so this is the one place the font could
+  // silently stay behind when the stylesheet changes.
+  const wheel = fs.readFileSync(path.join(out, "assets/js/wheel.mjs"), "utf8");
+  assert.match(
+    wheel,
+    /getComputedStyle\(document\.body\)\.fontFamily/,
+    "wheel.mjs should take its canvas font from the page",
+  );
+  assert.doesNotMatch(
+    wheel,
+    /\d+px ['"][A-Za-z]/,
+    "wheel.mjs should not name a typeface of its own",
+  );
+});
+
 test("no build-time paths leak into the output", () => {
   for (const page of pages) {
     const html = fs.readFileSync(page, "utf8");

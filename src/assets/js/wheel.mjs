@@ -62,7 +62,13 @@ function handleWheelClick(event) {
   openRecipe(sectors[sectorIndexAtAngle(Math.atan2(dy, dx))]);
 }
 
-const labelFont = (size) => `bold ${size}px 'Lato', sans-serif`;
+// A canvas doesn't inherit the page's font, so it has to be told. Taking it from
+// the stylesheet rather than naming a typeface here keeps the sector labels on
+// whatever the rest of the site is set in, with no second copy to drift. Read
+// once: it can't change, and fitLabel asks for it on every step of its measuring
+// loop.
+const pageFont = getComputedStyle(document.body).fontFamily;
+const labelFont = (size) => `bold ${size}px ${pageFont}`;
 
 // Labels are drawn inward from the rim, so a long one runs under the SPIN button
 // at the hub. Shrink it just enough to fit the space between rim and button.

@@ -1,10 +1,27 @@
 /* Loaded by every page, ahead of that page's own stylesheet. Only things genuinely
    shared belong here. */
 
+/* The one place the site's typeface is decided. Everything else inherits it or
+   says `font-family: inherit`, so there is no second copy to fall out of step.
+   Comic Sans ships with Windows and macOS but not with Linux or Android, so the
+   chain ends in the generic `cursive`, which lands on whatever handwriting-ish
+   face the system does have. */
+:root {
+  --font: "Comic Sans MS", "Comic Sans", cursive;
+}
+
 /* Without this the default 8px margin makes every page 16px taller than the
    viewport, which leaves the wheel page permanently scrollable. */
 body {
   margin: 0;
+  font-family: var(--font);
+}
+
+/* Form controls don't inherit the page font -- browsers give them their own -- so
+   they have to be told. */
+input,
+button {
+  font-family: inherit;
 }
 
 /* The wheel itself is the way back to it. Shared by the recipe pages and the
