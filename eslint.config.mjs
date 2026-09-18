@@ -36,6 +36,7 @@ export default defineConfig([
       "test/helpers/dom.mjs",
       "test/recipe-page.test.mjs",
       "test/easter-egg-page.test.mjs",
+      "test/wheel-page.test.mjs",
     ],
     plugins: { js },
     extends: ["js/recommended"],

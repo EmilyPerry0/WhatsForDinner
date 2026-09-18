@@ -23,6 +23,22 @@
       alt="no decisions required!"
     />
     <div class="center">
+      <!-- The two search PNGs are the box itself, so the input draws no border
+           of its own and sits on top of them. Which image shows is decided in
+           CSS from :focus and :placeholder-shown; the placeholder is a single
+           space purely so that second selector has something to test. -->
+      <div class="search" id="recipe_search_box">
+        <input
+          type="text"
+          id="recipe_search"
+          class="search_input"
+          placeholder=" "
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Search recipes"
+        />
+        <ul class="search_results" id="search_results" hidden></ul>
+      </div>
       <div id="spinner_wheel">
         <canvas id="wheel"></canvas>
         <div class="spin_button_wrapper">
@@ -32,5 +48,6 @@
       </div>
     </div>
     <script type="module" src="{{ '/assets/js/wheel.mjs' | url }}"></script>
+    <script type="module" src="{{ '/assets/js/search.mjs' | url }}"></script>
   </body>
 </html>

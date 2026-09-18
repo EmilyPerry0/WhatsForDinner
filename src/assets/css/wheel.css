@@ -41,8 +41,16 @@
 
 #spinner_wheel {
   position: relative;
-  width: 80vmin;
-  height: 80vmin;
+  /* Square, but bounded on both axes. 80vmin is what it has always been and what
+     it still gets at ordinary window shapes; the second bound only bites in a
+     short landscape window, where the wheel plus the search bar above it would
+     otherwise overflow the viewport and bring the scrollbar back. */
+  --wheel-reserve: 7rem; /* the search bar plus the gap above the wheel */
+  width: min(
+    80vmin,
+    calc(100svh - var(--corner-clearance) - var(--wheel-reserve))
+  );
+  aspect-ratio: 1;
   /* A rotated square's bounding box is bigger than the square, and it grows and
      shrinks as the wheel turns. Left uncontained it changes the page's scroll
      height every frame, which jitters the scrollbar and resizes the wheel.
@@ -63,7 +71,22 @@
 }
 
 .center {
+  /* Layout tunables, kept as plain single values in custom properties so
+     test/layout-overlap.test.mjs can read the real numbers out of this file and
+     prove the search bar never lands on the corner decorations. Change them
+     here and the test follows. */
+  --stack-gap: 2rem;
+  /* How far down the page the stack starts, to clear the tilted corner images.
+     Landscape needs none: the bar is narrow relative to the viewport there and
+     never reaches the banner. See the media query below. */
+  --corner-clearance: 0vmin;
+
   display: flex;
+  /* The search bar sits above the wheel, so this stacks rather than rows. */
+  flex-direction: column;
+  gap: var(--stack-gap);
+  padding-top: var(--corner-clearance);
+  box-sizing: border-box;
   justify-content: center;
   align-items: center;
   /* svh is the viewport with the mobile browser's chrome showing, so it doesn't
@@ -72,6 +95,107 @@
      resizes the wheel every time the URL bar moves. */
   height: 100vh;
   height: 100svh;
+}
+
+/* On square-ish and portrait screens the centred search bar is wide enough,
+   relative to the viewport, to reach the tilted banner in the top right corner.
+   Start the stack below the corner images there. Those shapes have height to
+   spare, so the wheel keeps its full 80vmin; landscape needs no clearance and is
+   left untouched. test/layout-overlap.test.mjs proves both halves of that. */
+@media (max-aspect-ratio: 5/4) {
+  .center {
+    --corner-clearance: 20vmin;
+  }
+}
+
+/* The search box. The PNGs are the drawn outline, so the input contributes no
+   border or background of its own -- it just puts text inside the picture. */
+.search {
+  --search-max-width: 434px; /* the image's own width */
+  --search-viewport-width: 70vw;
+  /* How far in from the right edge the tilted banner reaches, doubled: the bar is
+     centred, so staying this far from both edges keeps it clear of the corner
+     images on wide-but-short windows, where there is no room to drop below them. */
+  --search-corner-reach: 66vmin;
+  /* Below this the bar is too small to type in; on the shapes where this floor
+     binds, the clearance above does the work instead. */
+  --search-min-width: 240px;
+  position: relative; /* the results list hangs off this */
+  width: min(
+    var(--search-max-width),
+    var(--search-viewport-width),
+    max(var(--search-min-width), calc(100vw - var(--search-corner-reach)))
+  );
+  z-index: 3; /* over the wheel, and over the spin button's z-index: 2 */
+}
+
+.search_input {
+  display: block;
+  width: 100%;
+  /* The image's own proportions, so the outline never stretches. */
+  aspect-ratio: 434 / 56;
+  box-sizing: border-box;
+  border: 0;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url("../images/ui/search.png");
+  /* Keep the text inside the drawn outline rather than over it. The lettering in
+     search.png starts about a tenth of the way in, so typed text starts there
+     too and the two states line up. */
+  padding: 0 9%;
+  font-family: sans-serif;
+  font-size: clamp(0.8rem, 3.2vmin, 1.25rem);
+  color: #f57ac5; /* the pink the word "search" is drawn in */
+}
+
+/* Focused, or holding text: swap to the outline with no word in it, so what gets
+   typed isn't sitting on top of the lettering. Empty and unfocused falls back to
+   the rule above. The placeholder is a single space, which is what makes
+   :placeholder-shown mean "empty" here. */
+.search_input:focus,
+.search_input:not(:placeholder-shown) {
+  background-image: url("../images/ui/search_no_words.png");
+  outline: none;
+}
+
+/* Absolutely positioned on purpose: in flow, appearing and disappearing as you
+   type would change the page height on every keystroke, which is the scroll
+   jitter the wheel sizing works so hard to avoid. */
+.search_results {
+  position: absolute;
+  top: 100%;
+  left: 5%;
+  right: 5%;
+  margin: 0.25rem 0 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  background: #ffffff;
+  border: 2px solid #5dc0ec;
+  border-radius: 0.75rem;
+  max-height: 40vh;
+  overflow-y: auto;
+  font-family: sans-serif;
+}
+
+.search_result {
+  display: block;
+  padding: 0.4rem 0.9rem;
+  color: #3d3750;
+  text-decoration: none;
+}
+
+.search_result:hover,
+.search_result:focus {
+  background: #5dc0ec;
+  color: #ffffff;
+  outline: none;
+}
+
+.search_empty {
+  padding: 0.4rem 0.9rem;
+  color: #9a94ad;
+  font-size: 0.9rem;
 }
 
 /* Decorations in the top corners of the wheel page. The two are sized

@@ -248,6 +248,38 @@ test("fractions are rendered in the built pages", () => {
   );
 });
 
+test("the wheel page carries the search box and its script", () => {
+  // search.mjs finds these three by id; renaming one in the markup would break
+  // the search with nothing to show for it.
+  const html = read("index.html");
+  assert.match(html, /id="recipe_search_box"/);
+  assert.match(html, /id="recipe_search"/);
+  assert.match(html, /id="search_results"[^>]*hidden/);
+  assert.match(html, /<script type="module" src="[^"]*search\.mjs"/);
+  // The placeholder is what :placeholder-shown keys off; without it the empty
+  // state would never swap back to search.png.
+  assert.match(html, /id="recipe_search"[\s\S]{0,200}?placeholder=" "/);
+});
+
+test("both search box images ship and both states are styled", () => {
+  const css = read("assets/css/wheel.css");
+
+  // Resting state: the outline with the word in it.
+  assert.match(css, /\.search_input\s*\{[^}]*search\.png/);
+  // Focused, or holding text: the outline with no word, so typing doesn't land
+  // on top of the lettering.
+  assert.match(css, /:focus[\s\S]{0,120}?search_no_words\.png/);
+  assert.match(css, /:not\(:placeholder-shown\)/);
+
+  // Both files are really there, at the path the stylesheet asks for.
+  for (const [, ref] of css.matchAll(/url\("([^"]+)"\)/g)) {
+    const resolved = path.resolve(path.join(out, "assets/css"), ref);
+    assert.ok(fs.existsSync(resolved), `wheel.css references missing ${ref}`);
+  }
+  assert.ok(exists("assets/images/ui/search.png"));
+  assert.ok(exists("assets/images/ui/search_no_words.png"));
+});
+
 test("no build-time paths leak into the output", () => {
   for (const page of pages) {
     const html = fs.readFileSync(page, "utf8");
