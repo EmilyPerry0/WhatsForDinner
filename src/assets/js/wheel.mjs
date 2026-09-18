@@ -1,8 +1,11 @@
-const textColor = "#3D3750";
-const wheelBackgroundColor_1 = "#5DC0EC";
-const wheelBackgroundColor_2 = "#F57AC5";
-
-const SPIN_AGAIN_LABEL = "Spin Again!";
+import {
+  buildSectors,
+  sectorIndexAtAngle as sectorIndexFor,
+  FRICTION,
+  STOP_BELOW,
+  SPIN_MIN_VELOCITY,
+  SPIN_MAX_VELOCITY,
+} from "./wheel-logic.mjs";
 
 const LABEL_EDGE_PADDING = 10; // gap between a label and the wheel's rim
 const LABEL_HUB_GAP = 8; // gap between a label and the SPIN button
@@ -10,20 +13,6 @@ const MIN_LABEL_SIZE = 8; // don't shrink a long label past legibility
 
 // Built from recipe-index.json once it loads (see init).
 let sectors = [];
-
-// Turn the recipe list into drawable sectors: alternate the two wheel colors, and
-// pad with a "Spin Again" sector when the count is odd.
-function buildSectors(recipes) {
-  const entries = recipes.map((r) => ({ label: r.label, slug: r.slug }));
-  if (entries.length % 2 !== 0) {
-    entries.push({ label: SPIN_AGAIN_LABEL });
-  }
-  return entries.map((entry, i) => ({
-    ...entry,
-    color: i % 2 === 0 ? wheelBackgroundColor_1 : wheelBackgroundColor_2,
-    text: textColor,
-  }));
-}
 
 const rand = (m, M) => Math.random() * (M - m) + m;
 const spinEl = document.querySelector("#spin_button");
@@ -38,21 +27,15 @@ const PI = Math.PI;
 const TAU = 2 * PI;
 let arc = 0;
 
-const friction = 0.991; // 0.995=soft, 0.99=mid, 0.98=hard
 let angVel = 0; // Angular velocity
 let ang = 0; // Angle in radians
 
 let spinButtonClicked = false;
 
-// Which sector sits at a given screen angle. The spin applies a CSS rotation to
-// the canvas, so screen angles and wheel angles differ by exactly that rotation.
-// Scaling to sector units before flooring, rather than normalising the angle
-// first, is what keeps this exact for an angle landing on a sector border.
-function sectorIndexAtAngle(screenAngle) {
-  const wheelAngle = screenAngle - (ang - PI / 2);
-  const index = Math.floor((wheelAngle / TAU) * sectors.length);
-  return ((index % sectors.length) + sectors.length) % sectors.length;
-}
+// Current rotation and sector count come from this module's state; the maths
+// itself lives in wheel-logic.mjs.
+const sectorIndexAtAngle = (screenAngle) =>
+  sectorIndexFor(screenAngle, ang, sectors.length);
 
 // The arrow sits at the top of the wheel.
 const getIndex = () => sectorIndexAtAngle(-PI / 2);
@@ -178,8 +161,8 @@ function frame() {
     setTimeout(() => openRecipe(sector), 1000);
   }
 
-  angVel *= friction; // Decrement velocity by friction
-  if (angVel < 0.002) angVel = 0; // Bring to stop
+  angVel *= FRICTION; // Decrement velocity by friction
+  if (angVel < STOP_BELOW) angVel = 0; // Bring to stop
   ang += angVel; // Update angle
   ang %= TAU; // Normalize angle
   rotate();
@@ -205,7 +188,7 @@ function init() {
       resizeCanvas(); // set initial size + draw
       engine(); // Start engine
       spinEl.addEventListener("click", () => {
-        if (!angVel) angVel = rand(0.25, 0.478263); // 4.000 turns of span instead of 3.505
+        if (!angVel) angVel = rand(SPIN_MIN_VELOCITY, SPIN_MAX_VELOCITY);
         spinButtonClicked = true;
       });
       canvas.addEventListener("click", handleWheelClick);

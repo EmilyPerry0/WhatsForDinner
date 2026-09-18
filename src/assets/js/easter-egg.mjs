@@ -5,7 +5,7 @@ const photo = document.getElementById("egg_photo");
 const heart = document.getElementById("egg_heart");
 
 // The list is written into the page at build time from whatever is sitting in
-// src/images/easter_egg, so adding a photo needs no code change.
+// src/assets/images/easter-egg, so adding a photo needs no code change.
 let photos = [];
 try {
   photos = JSON.parse(page.dataset.photos);

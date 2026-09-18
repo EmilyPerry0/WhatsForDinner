@@ -28,4 +28,17 @@ export default defineConfig([
     extends: ["js/recommended"],
     languageOptions: { globals: globals.node },
   },
+  // The tests that stand up a jsdom page reach for the globals it installs, so
+  // they need the browser set too. Scoped to those files rather than all of
+  // test/, so a non-DOM test still gets told off for using document.
+  {
+    files: [
+      "test/helpers/dom.mjs",
+      "test/recipe-page.test.mjs",
+      "test/easter-egg-page.test.mjs",
+    ],
+    plugins: { js },
+    extends: ["js/recommended"],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+  },
 ]);
