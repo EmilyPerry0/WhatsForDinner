@@ -17,11 +17,20 @@
     >
       <img src="{{ '/assets/images/ui/heart-c-plus-e.png' | url }}" alt="" />
     </a>
-    <img
-      class="corner corner_right"
-      src="{{ '/assets/images/ui/no-decisions-required.png' | url }}"
-      alt="no decisions required!"
-    />
+    <!-- Same trick as the heart: the banner is a link too. Where it goes is left
+         unsaid on purpose, and the label still just describes the picture. -->
+    <a
+      class="corner corner_right corner_link"
+      href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      target="_blank"
+      rel="noopener"
+      aria-label="no decisions required!"
+    >
+      <img
+        src="{{ '/assets/images/ui/no-decisions-required.png' | url }}"
+        alt=""
+      />
+    </a>
     <div class="center">
       <!-- The two search PNGs are the box itself, so the input draws no border
            of its own and sits on top of them. Which image shows is decided in

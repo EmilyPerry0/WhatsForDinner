@@ -340,6 +340,33 @@ test("the whole site is set in one font, declared once", () => {
   }
 });
 
+test("both corner decorations are clickable links", () => {
+  // .corner sets pointer-events: none so the fixed, tilted decorations can never
+  // swallow a click meant for the wheel. Each link has to opt back in with
+  // .corner_link -- and forgetting that fails silently: the image still renders
+  // perfectly while every click on it goes nowhere.
+  const html = read("index.html");
+
+  const anchors = [...html.matchAll(/<a\b([\s\S]*?)>/g)].map((m) => m[1]);
+  const heart = anchors.find((a) => a.includes("corner_left"));
+  const banner = anchors.find((a) => a.includes("corner_right"));
+
+  assert.ok(heart, "the heart should be a link");
+  assert.match(heart, /corner_link/, "the heart needs its clicks back");
+  assert.match(heart, /href="[^"]*\/easter-egg\//);
+
+  assert.ok(banner, "the banner should be a link");
+  assert.match(banner, /corner_link/, "the banner needs its clicks back");
+  assert.match(
+    banner,
+    /href="https:\/\/www\.youtube\.com\/watch\?v=dQw4w9WgXcQ"/,
+    "the banner should go where it goes",
+  );
+  // Leaving the site, so a new tab and no window.opener handed to it.
+  assert.match(banner, /target="_blank"/);
+  assert.match(banner, /rel="noopener"/);
+});
+
 test("the font is shipped with the site, not borrowed from the visitor", () => {
   // Relying on the visitor owning Comic Sans is what put calligraphy on every
   // phone. Serving the font is the only way every device renders the same.
