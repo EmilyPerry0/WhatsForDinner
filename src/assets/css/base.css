@@ -3,11 +3,20 @@
 
 /* The one place the site's typeface is decided. Everything else inherits it or
    says `font-family: inherit`, so there is no second copy to fall out of step.
-   Comic Sans ships with Windows and macOS but not with Linux or Android, so the
-   chain ends in the generic `cursive`, which lands on whatever handwriting-ish
-   face the system does have. */
+
+   Comic Sans ships with Windows and macOS but not with iOS, Android or Linux, so
+   the rest of the chain matters. Chalkboard SE is Apple's casual handwriting face
+   and is on both iOS and macOS; Comic Neue is the free Comic Sans lookalike, for
+   anyone who happens to have it.
+
+   It ends in `sans-serif`, NOT `cursive`. The CSS generic `cursive` means formal
+   joined script, not casual lettering: on Apple platforms it resolves to Apple
+   Chancery or Snell Roundhand, which is calligraphy and looks nothing like Comic
+   Sans. That was live on the site once. A plain sans is a far better wrong
+   answer than a wedding invitation. */
 :root {
-  --font: "Comic Sans MS", "Comic Sans", cursive;
+  --font:
+    "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Comic Neue", sans-serif;
 }
 
 /* Without this the default 8px margin makes every page 16px taller than the

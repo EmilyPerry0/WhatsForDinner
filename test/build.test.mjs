@@ -284,10 +284,30 @@ test("the whole site is set in one font, declared once", () => {
   // "Everywhere" is the kind of thing that quietly becomes "almost everywhere"
   // when someone adds a component with its own font-family.
   const base = read("assets/css/base.css");
+  const stack = base
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .match(/--font:\s*([^;]+);/)[1]
+    .replace(/\s+/g, " ")
+    .trim();
+
   assert.match(
-    base,
-    /--font:\s*"Comic Sans MS"/,
-    "base.css should define the typeface",
+    stack,
+    /^"Comic Sans MS"/,
+    "Comic Sans should be asked for first",
+  );
+
+  // The bug that reached the live site: the chain ended in the generic `cursive`,
+  // which is formal joined script, not casual lettering. Any device without Comic
+  // Sans -- every iPhone and Android among them -- got Snell Roundhand.
+  assert.doesNotMatch(
+    stack,
+    /(^|[\s,])cursive\s*$/,
+    `the font stack must not fall back to the cursive generic: ${stack}`,
+  );
+  assert.match(
+    stack,
+    /sans-serif$/,
+    `the font stack should end in a neutral generic: ${stack}`,
   );
   assert.match(base, /body\s*\{[^}]*font-family:\s*var\(--font\)/);
   // Inputs and buttons get browser fonts unless told otherwise.
