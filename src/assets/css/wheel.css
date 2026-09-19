@@ -206,6 +206,12 @@
   display: block;
   width: min(var(--personal-site-width), 50vw);
   line-height: 0; /* kill the descender gap under the image */
+  text-decoration: none; /* the default underline draws across the image */
+}
+
+.personal_site img {
+  width: 100%;
+  display: block;
 }
 
 /* A viewport this short cannot hold the search bar, the wheel and this as well

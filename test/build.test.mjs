@@ -367,6 +367,21 @@ test("both corner decorations are clickable links", () => {
   assert.match(banner, /rel="noopener"/);
 });
 
+test("the personal-site image links out", () => {
+  const html = read("index.html");
+  const anchor = [...html.matchAll(/<a\b([\s\S]*?)>/g)]
+    .map((m) => m[1])
+    .find((a) => a.includes("personal_site"));
+
+  assert.ok(anchor, "the personal-site image should be a link");
+  assert.match(anchor, /href="https:\/\/emilyperry0\.github\.io\//);
+  // Leaving the site, so a new tab and no window.opener handed to it.
+  assert.match(anchor, /target="_blank"/);
+  assert.match(anchor, /rel="noopener"/);
+  // The image is the link's only content, so its alt is the accessible name.
+  assert.match(html, /<img[^>]*alt="Personal Website"/);
+});
+
 test("the font is shipped with the site, not borrowed from the visitor", () => {
   // Relying on the visitor owning Comic Sans is what put calligraphy on every
   // phone. Serving the font is the only way every device renders the same.
