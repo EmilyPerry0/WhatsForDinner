@@ -45,7 +45,9 @@
      it still gets at ordinary window shapes; the second bound only bites in a
      short landscape window, where the wheel plus the search bar above it would
      otherwise overflow the viewport and bring the scrollbar back. */
-  --wheel-reserve: 7rem; /* the search bar plus the gap above the wheel */
+  /* Everything stacked with the wheel: the search bar above, the personal-site
+     image below, and a gap on either side of the wheel. */
+  --wheel-reserve: 12rem;
   width: min(
     80vmin,
     calc(100svh - var(--corner-clearance) - var(--wheel-reserve))
@@ -194,6 +196,29 @@
   padding: 0.4rem 0.9rem;
   color: #9a94ad;
   font-size: 0.9rem;
+}
+
+/* Sits under the wheel. Smaller than the search bar above it -- it is a side
+   door, not the point of the page. Sized from the image's own proportions so the
+   hand-drawn outline never stretches. */
+.personal_site {
+  --personal-site-width: 200px;
+  display: block;
+  width: min(var(--personal-site-width), 50vw);
+  line-height: 0; /* kill the descender gap under the image */
+}
+
+/* A viewport this short cannot hold the search bar, the wheel and this as well
+   without squeezing the wheel down to nothing -- and the wheel is the page. Drop
+   this and hand the space back. */
+@media (max-height: 500px) {
+  .personal_site {
+    display: none;
+  }
+
+  #spinner_wheel {
+    --wheel-reserve: 7rem; /* the search bar and its gap, nothing below */
+  }
 }
 
 /* Decorations in the top corners of the wheel page. The two are sized

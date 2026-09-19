@@ -54,6 +54,30 @@ function clearanceFor(vp) {
     : px(value(".center", "--corner-clearance"), vp);
 }
 
+// Below a certain viewport height the personal-site image is dropped and the
+// wheel gets its space back. The test has to know, or its model stops describing
+// the page.
+function shortViewport(vp) {
+  const media = CSS.match(
+    /@media \(max-height:\s*(\d+)px\)\s*\{\n([\s\S]*?)\n\}/,
+  );
+  assert.ok(media, "the short-viewport media query is missing from wheel.css");
+  const applies = vp.height <= Number(media[1]);
+  const reserve = media[2].match(/--wheel-reserve:\s*([\d.]+)(rem|px)/);
+  assert.ok(reserve, "the media query should hand back the reserved space");
+  assert.match(
+    media[2],
+    /\.personal_site\s*\{[^}]*display:\s*none/,
+    "the media query should hide the personal-site image",
+  );
+  return {
+    applies,
+    reserve: applies
+      ? px({ amount: Number(reserve[1]), unit: reserve[2] }, vp)
+      : null,
+  };
+}
+
 function degrees(selector) {
   const match = rule(selector).match(/rotate\((-?[\d.]+)deg\)/);
   assert.ok(match, `${selector} has no rotation`);
@@ -147,13 +171,30 @@ function layout(vp) {
 
   const clearance = clearanceFor(vp);
   const gap = L(value(".center", "--stack-gap"));
+  const short = shortViewport(vp);
   const wheel = Math.min(
     0.8 * vmin,
-    vp.height - clearance - L(value("#spinner_wheel", "--wheel-reserve")),
+    vp.height -
+      clearance -
+      (short.reserve ?? L(value("#spinner_wheel", "--wheel-reserve"))),
   );
 
+  // The personal-site image sits under the wheel, so it is part of the stack and
+  // pushes everything above it upward -- including the search bar, back towards
+  // the corner decorations. On a short viewport it is hidden and contributes
+  // nothing, not even a gap.
+  const siteImage = pngSize("personal_website.png");
+  const siteWidth = Math.min(
+    L(value(".personal_site", "--personal-site-width")),
+    vp.width / 2,
+  );
+  const siteHeight = short.applies
+    ? 0
+    : siteWidth * (siteImage.height / siteImage.width);
+
   // Flex column, centred in what is left below the top padding.
-  const stack = searchHeight + gap + wheel;
+  const stack =
+    searchHeight + gap + wheel + (short.applies ? 0 : gap + siteHeight);
   const top = clearance + Math.max(0, (vp.height - clearance - stack) / 2);
 
   return {
