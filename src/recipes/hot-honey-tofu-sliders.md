@@ -21,6 +21,7 @@ layout: recipe-layout.njk
 - Cayenne Pepper
 - Ranch
 - Pickles
+- 1 Block Tofu
 
 
 ## Steps

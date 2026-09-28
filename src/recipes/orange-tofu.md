@@ -25,6 +25,7 @@ layout: recipe-layout.njk
 - 1 Tbsp Cornstarch
 - Green Onion
 - Broccoli
+- Rice
 
 ## Steps
 

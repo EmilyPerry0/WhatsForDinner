@@ -19,6 +19,7 @@ layout: recipe-layout.njk
 - 2 Tsp Sugar
 - 1 1/2 Cup Basil Leaves
 - 1 Egg pp (optional)
+- Rice
 
 ## Steps
 

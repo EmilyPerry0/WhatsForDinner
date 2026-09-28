@@ -16,6 +16,7 @@ layout: recipe-layout.njk
 - 2 Tsp Salt
 - 1 tsp Garlic Powder
 - 50 ml Soy Milk
+- Rice
 
 ## Steps
 

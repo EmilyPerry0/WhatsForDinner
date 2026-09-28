@@ -14,6 +14,7 @@ layout: recipe-layout.njk
 - Salt
 - 2 Cups Shredded Cheddar
 - 8 Sprigs Green Onion
+- Chips for Dipping
 
 ## Steps
 
